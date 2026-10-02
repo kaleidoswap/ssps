@@ -1,0 +1,254 @@
+{
+  "bolt12_tlvs": {
+    "ssps_lock": {
+      "record": "feb2d05f81fd01277b2261646472657373223a22657831703236656a337663763330366338383379716b723530707535707a376d78636a706d6a777a756c72706e3734703976356a70396e7374786a386170222c22616d6f756e74223a22313030303030222c22636f6e6669726d6174696f6e73223a322c22646561646c696e65223a333531313434302c226b6579223a22303239383963306237366362353633393731666463396265663331656330366333353630663332343964366565396535643833633537363235353936653035663666222c227261696c223a226c69717569643a6d61696e6e65742f63653039316339393862383363373862623731613633323331336261333736306631373633643963666366666165303232353866666139383635613337626432227d",
+      "type": 3000000385,
+      "value": {
+        "address": "ex1p26ej3vcv306c883yqkr50pu5pz7mxcjpmjwzulrpn74p9v5jp9nstxj8ap",
+        "amount": "100000",
+        "confirmations": 2,
+        "deadline": 3511440,
+        "key": "02989c0b76cb563971fdc9bef31ec06c3560f3249d6ee9e5d83c57625596e05f6f",
+        "rail": "liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2"
+      }
+    },
+    "ssps_rail": {
+      "record": "fe77359581a87b227261696c223a226c69717569643a6d61696e6e65742f63653039316339393862383363373862623731613633323331336261333736306631373633643963666366666165303232353866666139383635613337626432222c22726566756e64223a22303234643462366364313336313033326361396264326165623964393030616134643435643965616438306163393432333337346334353161373235346430373636227d",
+      "type": 2000000385,
+      "value": {
+        "rail": "liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2",
+        "refund": "024d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766"
+      }
+    },
+    "ssps_rails": {
+      "record": "fe3b9acb81605b226c69717569643a6d61696e6e65742f63653039316339393862383363373862623731613633323331336261333736306631373633643963666366666165303232353866666139383635613337626432222c226c6e3a6d61696e6e6574225d",
+      "type": 1000000385,
+      "value": [
+        "liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2",
+        "ln:mainnet"
+      ]
+    }
+  },
+  "card": {
+    "digest": "31a6a2097ad66fb1009c6572e55c08f45ac251d88bbb0118e3f08548b9e17c8e",
+    "nostr_event": {
+      "content": "{\"block_seconds\":{\"btc\":600,\"liquid\":60},\"http\":\"https://swap.example/ssps\",\"margins\":{\"ark\":86400,\"btc\":72,\"liquid\":120,\"ln\":40},\"name\":\"example\",\"pairs\":[{\"fee_base\":\"0\",\"fee_ppm\":2500,\"from\":\"btc:mainnet\",\"max\":\"5000000\",\"min\":\"10000\",\"to\":\"liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2\"}],\"pubkey\":\"462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b\",\"relays\":[\"wss://relay.example\"],\"type\":\"card\",\"v\":2}",
+      "created_at": 1790000000,
+      "id": "d3c0429d5e1fb3010008f4f016ddccfc5672bcbe3e5937aae6b61237113d0923",
+      "kind": 38384,
+      "pubkey": "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b",
+      "sig": "84fa43dfee43331a529854d6244eea39e85daa34daf7a2373f7cf0008600be32c12a3146ec49256f4b783885d9412c83be09d63130246ab07951af8b00173050",
+      "tags": [
+        [
+          "d",
+          "ssps"
+        ],
+        [
+          "n",
+          "mainnet"
+        ],
+        [
+          "expiration",
+          "1790003600"
+        ]
+      ]
+    },
+    "value": {
+      "block_seconds": {
+        "btc": 600,
+        "liquid": 60
+      },
+      "http": "https://swap.example/ssps",
+      "margins": {
+        "ark": 86400,
+        "btc": 72,
+        "liquid": 120,
+        "ln": 40
+      },
+      "name": "example",
+      "pairs": [
+        {
+          "fee_base": "0",
+          "fee_ppm": 2500,
+          "from": "btc:mainnet",
+          "max": "5000000",
+          "min": "10000",
+          "to": "liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2"
+        }
+      ],
+      "pubkey": "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b",
+      "relays": [
+        "wss://relay.example"
+      ],
+      "sig": "27835c8839a83d0f4ad29bdcae4480b39797135de13ff204c622a379bacdfba466fa780f89295a3910c638f368bd4329c8aa5075bc2c7dedf3997da2a4c858a1",
+      "type": "card",
+      "v": 2
+    }
+  },
+  "deadline_check": {
+    "block_seconds": {
+      "btc": 600,
+      "liquid": 60
+    },
+    "in_remaining_seconds": 180000,
+    "margin_in_rail_blocks": 72,
+    "ok": true,
+    "out_remaining_seconds": 86400
+  },
+  "locks": {
+    "btc_in": {
+      "address": "bc1pzax2uv59vr9gr8q7utk8scafc69s07cxw65lfcd6j2sjaynssv5qhpgk3t",
+      "claim_leaf": "82012088a9144d5209774e22ea63e2987579562d9a4ea3dab62388201b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078fac",
+      "deadline": 921300,
+      "internal_key": "1fc559d9c96c5953895d3150e64ebf3dd696a0b08e758650b48ff6251d7e60d1",
+      "leaf_version": 192,
+      "merkle_root": "d0dee5302804df838359de35254897d90c237c04048e6c5ad2ac1bf54d96b3e4",
+      "output_key": "174cae328560ca819c1ee2ec7863a9c68b07fb0676a9f4e1ba92a12e92708328",
+      "refund_leaf": "204d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766ad03d40e0eb1",
+      "script_pubkey": "5120174cae328560ca819c1ee2ec7863a9c68b07fb0676a9f4e1ba92a12e92708328"
+    },
+    "liquid_out": {
+      "claim_leaf": "82012088a9144d5209774e22ea63e2987579562d9a4ea3dab6238820989c0b76cb563971fdc9bef31ec06c3560f3249d6ee9e5d83c57625596e05f6fac",
+      "deadline": 3511440,
+      "internal_key": "3c6db9e1552917d21b3e021fc3d56c87664e79ec1fef2f15489f6bc4d0111ec7",
+      "leaf_version": 196,
+      "merkle_root": "331c3946022a7db7f0dc0c01f336e6c694b3234d61e4e7e62edd1cc61a876758",
+      "output_key": "350cf1192bd9362cfb07151717f584f1ebaa8f0a41b75a008d9d1a57a6255296",
+      "refund_leaf": "20f991f944d1e1954a7fc8b9bf62e0d78f015f4c07762d505e20e6c45260a3661bad03909435b1",
+      "script_pubkey": "5120350cf1192bd9362cfb07151717f584f1ebaa8f0a41b75a008d9d1a57a6255296"
+    }
+  },
+  "metadata": {
+    "draft": 2,
+    "payment_hash": "02d449a31fbb267c8f352e9968a79e3e5fc95c1bbeaa502fd6454ebde5a4bedc",
+    "preimage": "1111111111111111111111111111111111111111111111111111111111111111",
+    "secrets": {
+      "client_nostr": "0505050505050505050505050505050505050505050505050505050505050505",
+      "identity": "0404040404040404040404040404040404040404040404040404040404040404",
+      "payer_refund": "0202020202020202020202020202020202020202020202020202020202020202",
+      "provider_claim": "0101010101010101010101010101010101010101010101010101010101010101",
+      "provider_refund": "0808080808080808080808080808080808080808080808080808080808080808",
+      "recipient_claim": "0707070707070707070707070707070707070707070707070707070707070707"
+    },
+    "test_keys_only": true,
+    "tips": {
+      "btc": 921000,
+      "liquid": 3510000
+    }
+  },
+  "nostr_messages": {
+    "conversation_key": "1478860ce5b9543236becc178f904be2b792427ac2a508dcf1d4173a42e17a6a",
+    "quote_event": {
+      "content": "AjMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzz+y20Jld72E0aZ0OQxq42gK1ojh0c64nSTGfVGCeM/AlS+Pb5d+Yy4jQIooog7/4bihDmkgFD+x0SKWvI+wK6+zrYTX4eKBdPdgqr/1WlwvgzT0lnlxN5dffJdKOAQ5K0xeoAl/jR9YA9w+2Kk+cKXMI4WXDI6FMA9IJXqru36j14IxU3drUzsVIOo28BhB9uHqUw2f8V6pjmIorTSIH+pkUdiFO5V7QLPDQ8si3H9VJ37ljoN+t9xq1B/dShrty3MV1eGOxq70Jew3T+XrnIdd9J9w1lrNTkjga9Q+cqg8wf98Qeii0IgjuNsHK8PC2tsCK6p341yBC1ZEt6oExFNeT7Hn6v7aLC/7keFvNfrctHrOMY+zvAwmaD/+ccE/H5fW5okm9I0DZ0AmAb059hIwJey79UYPrBlJgwrDDq0DmdxkC+qj3GXcjLkn3BJaq+JpMWW9QT6gbZv+7FVvlPtFtgOheWKSCXPhV+esajmVuqbqC8VrOQMDY1f5+l51mNDWpucBVp8RYyIuPYSr3XqF/rsPR/ck6uBnQtFMAGmepG+3X05bFT2uv5ozuiOa9/FwFq7GfW+AmLtIg6M5/ZQX4wznFwXqkLBR9+KqzXImbTxEH0hiEZbWdN2vioucLTWxgWucVSw/HEv8hXVEBYVaApW1beiI7RbfXtEW9CsFi0Ki3QTZXEHlXynC8Skc7E2usXNR3yfRBlFCM0/8iFl5spi7LfCrpu20FSF/0klufBGR8phqpqQs5ctcYPCN/56Uu7lwbikLSDMVm56UzdIvDRf2bARCIVGjRkoTbOUKfvem5LXKT4lpJ4Mr7pKwBZBcJOZicTwHcXC7Ir9nRPXo9TBIw825iztjMqZaYLXrZdF151cRlrPkwwJpuR1LOREvWcSIDGkKt3EqSDbuTpFGdmmugKFoBZOLWI8bmnrb2ia6apB+acfejIsp+4mi4rOQnd5woep/iF51ordCDoObOfq1tigESqxSHgQRq7uSZZ3+QB/mVQR7s1Lk5uQo6lkcinx2dFP/T9h25D8tuAaW06i6b1wzIYH+vSg/S+gGDBXa9TQD0yWreVpllxsQkQWIFm7PxwlZtos80FJ0Fa5+9SL5cOILnjrZIidM2K31fBuvSh8xLB5N4YxnkyTK1EVO4XX9VgpsGgTXM43NrMj5cAfpAgDxJ7zq7fVZl1dP8T5URP6F1G8mGDp0sVR1rvicTg94gR0zjJv/dpCUC4yl5",
+      "created_at": 1790000001,
+      "id": "1002c7436880f696061e20f0af60d32a2d3c4916b8edc292fd5b0c404ae02b71",
+      "kind": 28384,
+      "pubkey": "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b",
+      "sig": "fa6cce9522a16241dd4e0f9b8b52b2948642576a8b44745b77c87a99ed6c31276530ae628cf999e90c01c6dfb48a6319d1ff34d203e23b84ae1b163a380669fd",
+      "tags": [
+        [
+          "p",
+          "62c0a046dacce86ddd0343c6d3c7c79c2208ba0d9c9cf24a6d046d21d21f90f7"
+        ],
+        [
+          "e",
+          "868d71f381e7e5952dd99d4657c12a4f01993f84365a44e109b7eb90bbda92f6"
+        ],
+        [
+          "expiration",
+          "1790000300"
+        ]
+      ]
+    },
+    "rfq_event": {
+      "content": "AiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiS3ndJHj0ZauQsc8D8varXzqWJ2a7mOZL9eEYUQYNSctoRdC32uICoPfzlCRFGPq/cUJX9dEgciNQqgAU79CzhkvNgRlcZlQZMQbvOxdxmd7OZx5obJFCRXILlBCbERAFGqhU/V0axgBmX03iduQo/9kf3J5cigK48/rFxyhBBKtkgzSllSC0J50oX7f+vGYomkaDSeYyYu9WqAmNb5KGaXrFLYA0l7b4H64qVA7EGifrknthkoDcF0yO0tl2Fq/6eer7eWmOEwg0EvqfQRWLCrw8NVMCfyPDl9bGCXw35ZvXXE02O9u02HgV2Fn/+/9WmPTadoilQ9ziANEoNDSdGkN/IPKhMIMA0OOiBzy12rL+EiRwsXnP15TFO2i074If/VWdTaQWv5plhkfmL4056u8h7qDd1gIXk497oLwRursUC5De7Vks2Vy5IOL8ATak8M18u6RJt9i3uoJcIYfxQuP5NSHjklBcyNjjspmhYjm4eMwHbFwoNdcPuetv1AwSQZWY75LbXGJG6rssMwRul3Bw4TvHDve8rMQ+upTUvNHv5QxQIqco5HDAgTCjq3YWkddyUyy7KN3V5aWFCgZVPW2UmC6R1GGpMs08wfGhL2XEFGtrTE7L10mPEbpIJKy7do+OeU487BHhgT4YDKqOp3rHOsLlC4UZIVSANuxg6iEeMT0tmH2yqoYOPbC/l16U5uszo1rmvpvKF7sATpR4AJ6Q4XGdlj1WvEU+T4p8DrChk4IsABx7RtAiwIHM/AOAIhH/pgDaqQ60nj0VzuvZODx+JoFX3CYZJGa7pc6KevHmqg4uJD/PrhOItiFHXiRLfwQgsb9z2Gyi/9nPUsAT0S+AGnRmDNhvHcQOcqcHoxkqt/MCOdDrUDC8wdAmFW4lGTY=",
+      "created_at": 1790000000,
+      "id": "868d71f381e7e5952dd99d4657c12a4f01993f84365a44e109b7eb90bbda92f6",
+      "kind": 28384,
+      "pubkey": "62c0a046dacce86ddd0343c6d3c7c79c2208ba0d9c9cf24a6d046d21d21f90f7",
+      "sig": "2b9136b37a6274bd78e31863fcc4223965cc05effe70e277789bdd38f9cd70d803eacdf33d3e1c1a00a915aad4c26197aa68aa6376aae6348cc2522ab6e4d602",
+      "tags": [
+        [
+          "p",
+          "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b"
+        ],
+        [
+          "expiration",
+          "1790000300"
+        ]
+      ]
+    }
+  },
+  "quote": {
+    "digest": "785d0b836ef1d8e33095dfe925a0bffc5f5b0ebdda2aee354106e61b2390bc95",
+    "value": {
+      "from_amount": "100250",
+      "id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "in": {
+        "confirmations": 1,
+        "deadline": 921300,
+        "lock": {
+          "address": "bc1pzax2uv59vr9gr8q7utk8scafc69s07cxw65lfcd6j2sjaynssv5qhpgk3t",
+          "claim_key": "031b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078f"
+        }
+      },
+      "out": {
+        "confirmations": 2,
+        "deadline": 3511440,
+        "refund": "03f991f944d1e1954a7fc8b9bf62e0d78f015f4c07762d505e20e6c45260a3661b"
+      },
+      "payment_hash": "02d449a31fbb267c8f352e9968a79e3e5fc95c1bbeaa502fd6454ebde5a4bedc",
+      "pubkey": "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b",
+      "request": "5621c4015878f3ad5523b8aa7f843c24803010d2b886f234b280fccfeb4818b0",
+      "sig": "8331946a79c8c32bb45e123a7b035120fbc89631a7f1ece3132c29c4ab7bc6d374c1c2829820dd70156cbf72ee0f9655091d8e34dff33aa1fe2f756315a04d4d",
+      "to_amount": "100000",
+      "type": "quote",
+      "v": 2,
+      "valid_until": 1790000120
+    }
+  },
+  "refusal": {
+    "id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+    "reason": "amount_out_of_range",
+    "type": "refusal",
+    "v": 2
+  },
+  "rfq": {
+    "jcs": "{\"amount\":\"100000\",\"from\":\"btc:mainnet\",\"id\":\"cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd\",\"in\":{\"refund\":\"024d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766\"},\"out\":{\"claim\":{\"address\":\"ex1p26ej3vcv306c883yqkr50pu5pz7mxcjpmjwzulrpn74p9v5jp9nstxj8ap\",\"key\":\"02989c0b76cb563971fdc9bef31ec06c3560f3249d6ee9e5d83c57625596e05f6f\"},\"deadline\":3511440},\"payment_hash\":\"02d449a31fbb267c8f352e9968a79e3e5fc95c1bbeaa502fd6454ebde5a4bedc\",\"side\":\"to\",\"to\":\"liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2\",\"type\":\"rfq\",\"v\":2}",
+    "request_digest": "5621c4015878f3ad5523b8aa7f843c24803010d2b886f234b280fccfeb4818b0",
+    "value": {
+      "amount": "100000",
+      "from": "btc:mainnet",
+      "id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "in": {
+        "refund": "024d4b6cd1361032ca9bd2aeb9d900aa4d45d9ead80ac9423374c451a7254d0766"
+      },
+      "out": {
+        "claim": {
+          "address": "ex1p26ej3vcv306c883yqkr50pu5pz7mxcjpmjwzulrpn74p9v5jp9nstxj8ap",
+          "key": "02989c0b76cb563971fdc9bef31ec06c3560f3249d6ee9e5d83c57625596e05f6f"
+        },
+        "deadline": 3511440
+      },
+      "payment_hash": "02d449a31fbb267c8f352e9968a79e3e5fc95c1bbeaa502fd6454ebde5a4bedc",
+      "side": "to",
+      "to": "liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2",
+      "type": "rfq",
+      "v": 2
+    }
+  },
+  "status": {
+    "reply": {
+      "detail": "bc1pzax2uv59vr9gr8q7utk8scafc69s07cxw65lfcd6j2sjaynssv5qhpgk3t",
+      "id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "state": "in_locked",
+      "type": "status",
+      "v": 2
+    },
+    "request": {
+      "id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "type": "status",
+      "v": 2
+    }
+  }
+}
