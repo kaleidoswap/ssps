@@ -2,6 +2,9 @@
 
 ## Draft 2, revisions — 2026-10-02
 
+- §9 references the prior art the document builds on (Boltz, Electrum,
+  Arkade, Bark, submarine swaps, LDK) and the standards it uses, with
+  acknowledgements.
 - Ark splits into two rails, because the implementations' locks differ and
   their servers do not interoperate: `arkade` (VHTLC.ScriptV2 between any two
   parties, Unix time) and `bark` (Second's HTLC VTXOs, with the server as the

@@ -529,3 +529,56 @@ from Bark: her wallet locks a `ServerHtlcSend` and the server forwards the
 payment. Once the provider's lock is ready she claims it straight to the
 merchant's address. Her claim reveals `P`, the provider settles, and the server
 claims her VTXO.
+
+## 9. References and acknowledgements
+
+SSPS generalises the swap protocol Boltz runs in production to routes of legs
+across providers, and borrows its discovery and negotiation from Electrum and
+Arkade. Where it differs from any of them, the text says so.
+
+**Prior art this document builds on**
+
+- Boltz: Taproot swaps with MuSig2 key path and the two leaves of §1.1, the
+  claim and refund flows, 0-conf policy, BOLT12 invoice verification and hosted
+  offers, and the magic routing hint that §5.3 moves into the invoice itself.
+  [Claims & Refunds](https://github.com/BoltzExchange/boltz-backend/blob/master/docs/claiming-swaps.md),
+  [Swap types & states](https://github.com/BoltzExchange/boltz-backend/blob/master/docs/lifecycle.md),
+  [0-conf](https://github.com/BoltzExchange/boltz-backend/blob/master/docs/0-conf.md),
+  [BOLT12](https://github.com/BoltzExchange/boltz-backend/blob/master/docs/bolt12.md),
+  [Magic Routing Hints](https://github.com/BoltzExchange/boltz-backend/blob/master/docs/magic-routing-hints.md),
+  [boltz-core](https://github.com/BoltzExchange/boltz-core).
+- Electrum swap server: provider discovery as addressable Nostr events with
+  expiry and proof of work, which the cards of §6 follow.
+  [`submarine_swaps.py`](https://github.com/spesmilo/electrum/blob/master/electrum/submarine_swaps.py).
+- Arkade: `VHTLC.ScriptV2` (§1.1) and the Intents RFQ over ephemeral,
+  NIP-44 encrypted Nostr events, where funding a quote is its acceptance (§3.3,
+  §6). [ts-sdk](https://github.com/arkade-os/ts-sdk),
+  [swap package](https://github.com/arkade-os/ts-sdk/tree/master/packages/swap).
+- Bark (Second): the server HTLC VTXO policies of §1.4.
+  [`vtxo/policy`](https://codeberg.org/ark-bitcoin/bark/src/branch/master/lib/src/vtxo/policy/mod.rs).
+- Submarine swaps as a construction: Alex Bosworth,
+  [swaps-service](https://github.com/submarineswaps/swaps-service) (2018).
+- LDK: the offers implementation whose authenticated metadata §5.3 and §5.4
+  account for.
+  [rust-lightning](https://github.com/lightningdevkit/rust-lightning).
+
+**Standards referenced**
+
+[BOLT 11](https://github.com/lightning/bolts/blob/master/11-payment-encoding.md),
+[BOLT 12](https://github.com/lightning/bolts/blob/master/12-offer-encoding.md),
+[BIP-68](https://github.com/bitcoin/bips/blob/master/bip-0068.mediawiki),
+[BIP-327](https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki),
+[BIP-340](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki),
+[BIP-341](https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki),
+[Elements tapscript opcodes](https://github.com/ElementsProject/elements/blob/master/doc/tapscript_opcodes.md),
+[NIP-13](https://github.com/nostr-protocol/nips/blob/master/13.md),
+[NIP-40](https://github.com/nostr-protocol/nips/blob/master/40.md),
+[NIP-44](https://github.com/nostr-protocol/nips/blob/master/44.md),
+[RFC 8785](https://www.rfc-editor.org/rfc/rfc8785) (JCS).
+
+**Acknowledgements**
+
+Thanks to the Boltz, Electrum, Arkade and Second teams for publishing their
+protocols with enough precision to be reused and compared, and to the authors
+of the standards above. None of them has reviewed or endorsed this document;
+its errors are ours.

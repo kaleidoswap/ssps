@@ -17,6 +17,7 @@ The whole specification is one document: [ssps.md](ssps.md).
 | 5 | BOLT12: paying offers, held offers, rails in an offer, hosted offers |
 | 6 | Transports: Nostr (Electrum-style cards, Arkade Intents-style RFQs) and HTTP |
 | 8 | Scenarios |
+| 9 | References and acknowledgements |
 
 Draft 2 replaces two earlier private drafts; the [changelog](CHANGELOG.md) says
 what changed.
