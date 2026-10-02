@@ -118,8 +118,8 @@ class Vectors(unittest.TestCase):
         preimage = bytes.fromhex(FIX['metadata']['preimage'])
         self.assertEqual(leaf[6:26], r.rmd160(r.sha256(preimage)))
 
-    def test_ark_v2_claim_leaf(self):
-        ark = FIX['locks']['ark_v2']
+    def test_arkade_v2_claim_leaf(self):
+        ark = FIX['locks']['arkade_v2']
         leaf = (bytes.fromhex('82012088a914') + bytes.fromhex(ark['preimage_hash160'])
                 + bytes.fromhex('876920') + bytes.fromhex(ark['receiver'])
                 + bytes.fromhex('ad20') + bytes.fromhex(ark['server']) + bytes.fromhex('ac'))

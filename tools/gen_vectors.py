@@ -35,10 +35,10 @@ def tlv(record_type, value):
     return (r.bigsize(record_type) + r.bigsize(len(raw)) + raw).hex()
 
 
-# An `ark` VHTLC.ScriptV2 lock as @arkade-os/sdk 0.4.60 builds it (six leaves, no
+# An `arkade` VHTLC.ScriptV2 lock as @arkade-os/sdk 0.4.60 builds it (six leaves, no
 # covenants). Copied from the SDK, not derived here: the tools rebuild only the
 # claim leaf; the output key is the SDK's tweakedPublicKey for these inputs.
-ARK_V2 = {
+ARKADE_V2 = {
     'source': '@arkade-os/sdk 0.4.60 VHTLC.ScriptV2, regtest',
     'sender': '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798',
     'receiver': 'c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5',
@@ -74,7 +74,7 @@ def generate():
     card_body = {'v': 2, 'type': 'card', 'pubkey': xonly(identity), 'name': 'example',
                  'pairs': [{'from': 'btc:mainnet', 'to': 'liquid:mainnet/' + USDT,
                             'min': '10000', 'max': '5000000', 'fee_ppm': 2500, 'fee_base': '0'}],
-                 'margins': {'btc': 72, 'liquid': 120, 'ark': 86400, 'ln': 40},
+                 'margins': {'btc': 72, 'liquid': 120, 'arkade': 86400, 'ln': 40},
                  'block_seconds': {'btc': 600, 'liquid': 60},
                  'relays': ['wss://relay.example'], 'http': 'https://swap.example/ssps'}
     card = signed(CARD_DOMAIN, card_body, identity)
@@ -122,7 +122,7 @@ def generate():
                      'preimage': preimage.hex(), 'payment_hash': H, 'tips': tips},
         'locks': {'btc_in': {**btc_lock, 'address': btc_address, 'deadline': in_deadline},
                   'liquid_out': {**liquid_lock, 'deadline': out_deadline},
-                  'ark_v2': ARK_V2},
+                  'arkade_v2': ARKADE_V2},
         'deadline_check': {'margin_in_rail_blocks': 72, 'block_seconds': card_body['block_seconds'],
                            'in_remaining_seconds': 300 * 600, 'out_remaining_seconds': 1440 * 60,
                            'ok': 300 * 600 >= 1440 * 60 + 72 * 600},

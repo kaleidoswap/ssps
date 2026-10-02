@@ -30,14 +30,14 @@
     }
   },
   "card": {
-    "digest": "31a6a2097ad66fb1009c6572e55c08f45ac251d88bbb0118e3f08548b9e17c8e",
+    "digest": "c1453fae9017c8502d0d6974b98603f39817a96102371cf5ecddb6b4673fd5a3",
     "nostr_event": {
-      "content": "{\"block_seconds\":{\"btc\":600,\"liquid\":60},\"http\":\"https://swap.example/ssps\",\"margins\":{\"ark\":86400,\"btc\":72,\"liquid\":120,\"ln\":40},\"name\":\"example\",\"pairs\":[{\"fee_base\":\"0\",\"fee_ppm\":2500,\"from\":\"btc:mainnet\",\"max\":\"5000000\",\"min\":\"10000\",\"to\":\"liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2\"}],\"pubkey\":\"462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b\",\"relays\":[\"wss://relay.example\"],\"type\":\"card\",\"v\":2}",
+      "content": "{\"block_seconds\":{\"btc\":600,\"liquid\":60},\"http\":\"https://swap.example/ssps\",\"margins\":{\"arkade\":86400,\"btc\":72,\"liquid\":120,\"ln\":40},\"name\":\"example\",\"pairs\":[{\"fee_base\":\"0\",\"fee_ppm\":2500,\"from\":\"btc:mainnet\",\"max\":\"5000000\",\"min\":\"10000\",\"to\":\"liquid:mainnet/ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2\"}],\"pubkey\":\"462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b\",\"relays\":[\"wss://relay.example\"],\"type\":\"card\",\"v\":2}",
       "created_at": 1790000000,
-      "id": "d3c0429d5e1fb3010008f4f016ddccfc5672bcbe3e5937aae6b61237113d0923",
+      "id": "e7a3c8dd078def67a73cbfa803c62cdf3f498ab42977a233e407d96ffd61d82c",
       "kind": 38384,
       "pubkey": "462779ad4aad39514614751a71085f2f10e1c7a593e4e030efb5b8721ce55b0b",
-      "sig": "84fa43dfee43331a529854d6244eea39e85daa34daf7a2373f7cf0008600be32c12a3146ec49256f4b783885d9412c83be09d63130246ab07951af8b00173050",
+      "sig": "806bc5436c3ff45da757de10b9801515182091de3dea05a83f7cc92a8eecfeba75937454b91c540b245b981732fe78d0670cfa2ce46586edcbb34f9c6702a676",
       "tags": [
         [
           "d",
@@ -60,7 +60,7 @@
       },
       "http": "https://swap.example/ssps",
       "margins": {
-        "ark": 86400,
+        "arkade": 86400,
         "btc": 72,
         "liquid": 120,
         "ln": 40
@@ -80,7 +80,7 @@
       "relays": [
         "wss://relay.example"
       ],
-      "sig": "27835c8839a83d0f4ad29bdcae4480b39797135de13ff204c622a379bacdfba466fa780f89295a3910c638f368bd4329c8aa5075bc2c7dedf3997da2a4c858a1",
+      "sig": "22cf3e40b84132f557fa28eedf8ba551669b260296fd81e66022d059bab660b30942662cf56f02c46e0ef0d8b706bbc75dd47de54e5103016dde497c5ac52b07",
       "type": "card",
       "v": 2
     }
@@ -96,7 +96,7 @@
     "out_remaining_seconds": 86400
   },
   "locks": {
-    "ark_v2": {
+    "arkade_v2": {
       "claim_leaf": "82012088a9146f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b876920c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5ad20f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9ac",
       "output_key": "205fcd2eb2a6c08273f7e2a7853112b64c8511bc3af199548e426dac83068455",
       "preimage_hash160": "6f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b",

@@ -4,7 +4,7 @@
 
 SSPS lets a wallet swap between rails, or pay someone on another rail, through
 providers that never hold its funds. Every route is a list of legs locked on one
-payment hash: BTC and Liquid HTLCs, Ark VHTLCs, Lightning and RGB Lightning
+payment hash: BTC and Liquid HTLCs, Arkade VHTLCs, Bark server HTLCs, Lightning and RGB Lightning
 hold payments. BOLT12 offers can list the rails their issuer accepts, so a payer
 pays directly when it shares one, and through providers when it does not.
 
@@ -24,7 +24,7 @@ what changed.
 ## Test vectors
 
 [test-vectors/draft2.json](test-vectors/draft2.json) covers the `btc` and
-`liquid` locks, an `ark` ScriptV2 lock taken from the Arkade SDK, a signed card (HTTP and Nostr), an `rfq` and the `quote` that
+`liquid` locks, an `arkade` ScriptV2 lock taken from the Arkade SDK, a signed card (HTTP and Nostr), an `rfq` and the `quote` that
 binds it, NIP-44 encrypted Nostr messages, and the three BOLT12 TLVs. All keys
 are public test keys; the pure-Python primitives in `tools/ssps_ref.py` are for
 fixtures only. NIP-44 is also checked against a subset of the

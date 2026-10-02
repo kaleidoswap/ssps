@@ -25,12 +25,14 @@ A leg moves `amount` of an asset on a `rail` from a payer to a payee:
 |---|---|---|---|---|
 | `btc` | P2TR: claim leaf (hash + payee key), refund leaf (CLTV + payer key), MuSig2 key path | claim witness | refund leaf | Bitcoin height |
 | `liquid` | the same on Elements, L-BTC or an issued asset | claim witness | refund leaf | Liquid height |
-| `ark` | `VHTLC.ScriptV2` on an Ark server | claim leaf | refund leaf, or the unilateral leaves after an exit | Unix time |
+| `arkade` | `VHTLC.ScriptV2` on an Arkade server, between any two parties | claim leaf | refund leaf, or the unilateral leaves after an exit | Unix time |
+| `bark` | HTLC VTXO on a Bark server, with the server as counterparty (§1.4) | claim clause, or cooperative spend with the server | expiry clause after the exit delay | Bitcoin height |
 | `ln` | payment held for `H`: BOLT11 hold invoice, BOLT12 invoice | settlement | HTLC expiry | Bitcoin height |
 | `rgb-ln` | RGB Lightning payment held for `H` | settlement | HTLC expiry | Bitcoin height |
 
 Rail ids name the network and, where one exists, the service or asset:
-`btc:mainnet`, `liquid:mainnet/<asset id>`, `ark:<server x-only pubkey>`,
+`btc:mainnet`, `liquid:mainnet/<asset id>`, `arkade:<server x-only pubkey>`,
+`bark:<server x-only pubkey>`,
 `ln:mainnet`, `rgb-ln:mainnet/<contract id>`. Networks are `mainnet`,
 `testnet4`, `signet`, or a custom signet's own name (`mutinynet`). Custom
 signets share signet's genesis block, so a chain hash cannot tell them apart;
@@ -64,13 +66,13 @@ the rail id must.
   Leaf version and tagged hashes are BIP-341's on `btc` (`0xc0`) and Elements'
   on `liquid` (`0xc4`, `TapLeaf/elements`, `TapBranch/elements`,
   `TapTweak/elements`).
-- An `ark` lock is Arkade's six-leaf `VHTLC.ScriptV2`: the `VHTLC.Script`
+- An `arkade` lock is Arkade's six-leaf `VHTLC.ScriptV2`: the `VHTLC.Script`
   leaves with `OP_SIZE 32 OP_EQUALVERIFY` ahead of the preimage check on
   `claim` and `unilateralClaim`, whoever funds it. `VHTLC.Script` (v1) checks
   no length, so a payee could claim a provider's lock with a longer preimage
   that no Lightning payment or size-checked lock can be settled with.
-- An `ark` lock has four timeouts: `refund`, an absolute Unix time, is the
-  leg's deadline (Ark servers reject height-based refund locktimes);
+- An `arkade` lock has four timeouts: `refund`, an absolute Unix time, is the
+  leg's deadline (Arkade servers reject height-based refund locktimes);
   `unilateral_claim`, `unilateral_refund` and `unilateral_refund_without_receiver`
   are the BIP-68 relative delays, in seconds, of the leaves that spend without
   the server. A quote or `ssps_lock` carries all four and the server key, and
@@ -109,17 +111,43 @@ deadline(incoming) >= deadline(outgoing) + margin(incoming rail)
 
 `margin(rail)` is what the provider needs, once `P` appears on its outgoing
 leg, to make its incoming claim final: observation delay, confirmations,
-fee-bumping room and reorg depth on chain rails, a unilateral exit on `ark`, an
+fee-bumping room and reorg depth on chain rails, a unilateral exit on `arkade`
+and `bark`, an
 on-chain HTLC resolution on `ln` if the peer is offline. Providers publish
 margins (§3.1) and refuse, never clamp, a route that breaks them.
 
-Chain and Ark deadlines are fixed in the lock. An `ln` deadline is the HTLC
+Chain, Arkade and Bark deadlines are fixed in the lock. An `ln` deadline is the HTLC
 expiry, known only on arrival: a provider receiving on `ln` requires a
 `min_final_cltv` and checks the expiry it got; a provider paying on `ln` caps
 the route's CLTV below its incoming deadline minus the margin.
 
 Across clocks, convert with the published block intervals, round in the safe
 direction and add margin.
+
+### 1.4 Bark
+
+Ark has two implementations whose locks differ and whose servers do not
+interoperate, so they are two rails. Arkade's VHTLC is a lock between any two
+parties. Bark (Second) has hash-locked VTXOs only with its server as
+counterparty, which the server uses to send and receive Lightning payments:
+
+- `ServerHtlcSend`, the wallet paying: the server claims with `P`; the wallet
+  takes the VTXO back after `htlc_expiry` plus twice the exit delay;
+- `ServerHtlcRecv`, the wallet receiving: the wallet claims with `P` after the
+  exit delay plus `htlc_expiry_delta`, or at once with the server's cosignature;
+  the server takes the VTXO back after `htlc_expiry` plus the exit delay.
+
+Both check `OP_SIZE 32` before the hash; the `_v0` variants do not and are not
+used. Expiries and delays are Bitcoin heights and block counts.
+
+A Bark wallet therefore takes part in routes through its server, which is the
+provider of a `bark` ↔ `ln` hop: as payer it locks a `ServerHtlcSend` for `H`
+and the server pays the route's first `ln` leg; as recipient the server holds
+the last `ln` leg and locks a `ServerHtlcRecv` for `H`. The wallet rebuilds its
+HTLC VTXO from `H`, its key, the server key, the expiry and the exit delay
+before acting (rule 1), and its `ln` side follows §1.3 like any provider's. A
+`bark` leg with any other provider is not possible until Bark has a two-party
+hash lock.
 
 ## 2. Safety rules
 
@@ -166,7 +194,7 @@ rejected. `JCS` is RFC 8785. Use a fresh `id` and fresh keys per provider asked.
 { "v": 2, "type": "card", "pubkey": "<x-only identity>", "name": "example",
   "pairs": [{ "from": "ln:mainnet", "to": "liquid:mainnet/<asset id>",
               "min": "10000", "max": "5000000", "fee_ppm": 2500, "fee_base": "0" }],
-  "margins": { "btc": 72, "liquid": 120, "ark": 86400, "ln": 40 },
+  "margins": { "btc": 72, "liquid": 120, "arkade": 86400, "ln": 40 },
   "block_seconds": { "btc": 600, "liquid": 60 },
   "relays": ["wss://relay.example"], "http": "https://swap.example/ssps" }
 ```
@@ -186,13 +214,13 @@ rail as the provider's incoming leg, in that rail's clock unit.
 ```
 
 - `side` fixes `from` (what the payer locks) or `to` (what the payee gets).
-- `in.refund` is the payer's refund key for chain and Ark rails. On `ln` it is
+- `in.refund` is the payer's refund key for chain and Arkade rails. On `ln` it is
   either absent, for a BOLT11 hold invoice, or a BOLT12 refund (`lnr1…`) that
   the provider answers with an invoice held on `H` (§5.2).
-- `out.claim` is the payee: its claim key and payout address on chain and Ark
+- `out.claim` is the payee: its claim key and payout address on chain and Arkade
   rails (a plain address cannot be claimed with `P`, so it is not a valid
   payout; a provider payee may omit the address), an invoice or offer (§5) on
-  `ln` and `rgb-ln`. `out.deadline` is required on chain and Ark rails.
+  `ln` and `rgb-ln`. `out.deadline` is required on chain and Arkade rails.
 - `payment_hash` may be omitted when `out.claim` commits to one; if both are
   given they must match.
 
@@ -210,17 +238,17 @@ rail as the provider's incoming leg, in that rail's clock unit.
 
 - `request` binds the quote to the exact `rfq`.
 - `in.lock` lets the payer rebuild the incoming lock: the provider's claim key
-  and the resulting address on chain and Ark rails, plus `server` and
-  `timeouts` (§1.1) on `ark`; the hold invoice on `ln` and `rgb-ln`.
-  `out.refund` is the provider's refund key for an outgoing chain or Ark lock,
-  so the payee can rebuild it; an outgoing Ark lock adds `server` and
+  and the resulting address on chain and Arkade rails, plus `server` and
+  `timeouts` (§1.1) on `arkade`; the hold invoice on `ln` and `rgb-ln`.
+  `out.refund` is the provider's refund key for an outgoing chain or Arkade lock,
+  so the payee can rebuild it; an outgoing Arkade lock adds `server` and
   `timeouts` to `out`.
 - On `liquid`, a confidential lock's address comes with its `blinding_key`, in
   `in.lock` or in `out`.
 - An `ln` leg carries `min_final_cltv` (incoming) or `max_expiry` (outgoing)
   instead of `deadline`.
 - `in.prepay` is optional. When the incoming leg is `ln` and the provider funds
-  a chain or Ark lock, it can ask for a BOLT11 invoice settled on arrival, for
+  a chain or Arkade lock, it can ask for a BOLT11 invoice settled on arrival, for
   at most what that lock costs it in fees. The payer pays it together with the
   hold invoice; the provider settles it only once the hold invoice's full
   amount is also held, and locks nothing before. It is part of
@@ -264,7 +292,7 @@ Build the route backwards from the recipient:
    then lock `L1`. The route arms from the payer and settles from the
    recipient.
 
-On a chain or Ark leg between two providers the upstream provider publishes
+On a chain or Arkade leg between two providers the upstream provider publishes
 the lock: the downstream quote gives only `in.lock.claim_key`, its deadline and
 confirmations, the upstream provider builds the lock with its own key and
 states it as `out.refund`, and the downstream provider rebuilds it before
@@ -307,7 +335,7 @@ ranges until allocated. Values are UTF-8 JCS JSON.
 |---|---|---|
 | offer | 1000000385 | `ssps_rails`: accepted rail ids, most preferred first; `ln` is always accepted, last unless listed |
 | invoice_request | 2000000385 | `ssps_rail`: `{ "rail", "refund" }` chosen by the payer |
-| invoice | 3000000385 | `ssps_lock`: `{ "rail", "amount", "key", "address", "deadline", "confirmations" }` for `invoice_payment_hash`, plus `server` and `timeouts` on `ark` and `blinding_key` on a confidential `liquid` lock |
+| invoice | 3000000385 | `ssps_lock`: `{ "rail", "amount", "key", "address", "deadline", "confirmations" }` for `invoice_payment_hash`, plus `server` and `timeouts` on `arkade` and `blinding_key` on a confidential `liquid` lock |
 
 A bare `ln` is Lightning on the offer's network; on a custom signet, whose
 chain hash is signet's, rails are named in full (`ln:mutinynet`).
@@ -432,38 +460,38 @@ it carries, and locks it. Bob claims and `P` is Alice's receipt. No provider.
 ### 8.3 Payment through a provider (§4, §5.3)
 
 ```
-Alice (has BTC on Ark)
-  │ ark VHTLC, BTC, deadline t2
+Alice (has BTC on Arkade)
+  │ arkade VHTLC, BTC, deadline t2
   ▼
 Maker
-  │ rgb-ln hold, USDT, deadline t1        t2 >= t1 + margin(ark)
+  │ rgb-ln hold, USDT, deadline t1        t2 >= t1 + margin(arkade)
   ▼
 Merchant (offer: ssps_rails = [rgb-ln:mainnet/<USDT>, ln])
 ```
 
 Alice cannot pay on any listed rail. She requests an invoice for `rgb-ln`,
-asks makers for `ark → rgb-ln` with `out.claim` = that invoice, and locks the
+asks makers for `arkade → rgb-ln` with `out.claim` = that invoice, and locks the
 chosen maker's VHTLC. The maker locks the RGB payment once the VHTLC is ready.
 
-### 8.4 Swap between two Ark servers (§4, §5.1, §5.2)
+### 8.4 Swap between two Arkade servers (§4, §5.1, §5.2)
 
 ```
-Alice on Ark A
-  │ ark VHTLC on A, deadline t3
+Alice on Arkade A
+  │ arkade VHTLC on A, deadline t3
   ▼
 Maker 1
   │ ln, BOLT12 invoice held on H, deadline t2
   ▼
 Maker 2
-  │ ark VHTLC on B, deadline t1           t3 > t2 > t1
+  │ arkade VHTLC on B, deadline t1        t3 > t2 > t1
   ▼
-Alice on Ark B
+Alice on Arkade B
 ```
 
-Alice chooses `P`. She asks Maker 2 for `ln → ark B` with her claim key on B;
+Alice chooses `P`. She asks Maker 2 for `ln → arkade B` with her claim key on B;
 its quote's `in.lock` is a single-use offer for `H`. She asks Maker 1 for
-`ark A → ln` with `out.claim` = that offer, verifies the whole route, and
-locks on Ark A. Her claim on Ark B releases every leg.
+`arkade A → ln` with `out.claim` = that offer, verifies the whole route, and
+locks on Arkade A. Her claim on Arkade B releases every leg.
 
 ### 8.5 Offer for a wallet without a node (§5.4)
 
@@ -481,3 +509,23 @@ For each invoice request the provider relays, Carla picks a fresh `P`, gets
 the entry node and `min_final_cltv` for `H` in a quote, and signs the invoice.
 The payer sees an ordinary BOLT12 payment.
 
+### 8.6 Bark wallet pays an on-chain address (§1.4)
+
+```
+Alice (Bark wallet)
+  │ bark ServerHtlcSend for H
+  ▼
+Bark server
+  │ ln, provider's hold invoice for H
+  ▼
+Provider
+  │ btc HTLC to Alice's claim key
+  ▼
+Alice, who claims to the merchant's address
+```
+
+Alice holds `P` and asks a provider for `ln → btc`. She pays its hold invoice
+from Bark: her wallet locks a `ServerHtlcSend` and the server forwards the
+payment. Once the provider's lock is ready she claims it straight to the
+merchant's address. Her claim reveals `P`, the provider settles, and the server
+claims her VTXO.

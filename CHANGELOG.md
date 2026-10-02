@@ -2,22 +2,28 @@
 
 ## Draft 2, revisions — 2026-10-02
 
+- Ark splits into two rails, because the implementations' locks differ and
+  their servers do not interoperate: `arkade` (VHTLC.ScriptV2 between any two
+  parties, Unix time) and `bark` (Second's HTLC VTXOs, with the server as the
+  only counterparty, Bitcoin heights). The `ark` rail id is renamed `arkade`.
+  New §1.4 says how a Bark wallet joins routes through its server, and §8.6
+  shows a Bark wallet paying an on-chain address.
 - Network names: `mainnet`, `testnet4`, `signet`, or a custom signet's own
   name. Custom signets share signet's chain hash, so rail ids name them.
 - `P` is 32 random bytes and `H = SHA256(P)`, stated in §1.2.
-- `ark` locks are `VHTLC.ScriptV2` (size check on `claim` and
+- `arkade` locks are `VHTLC.ScriptV2` (size check on `claim` and
   `unilateralClaim`), whoever funds them; `VHTLC.Script` v1 is no longer
   allowed. Quotes and `ssps_lock` carry the server key and the four timeouts.
-- Optional `in.prepay` on provider-funded chain and Ark locks bought with
+- Optional `in.prepay` on provider-funded chain and Arkade locks bought with
   Lightning, settled on arrival, so abandoning such a lock costs the payer.
 - Confidential `liquid` locks carry their `blinding_key`.
 - §5.3: bare `ln` means Lightning on the offer's network; `ssps_rails` is set
   when the offer is created (adding it later breaks LDK's offer recognition);
-  `ssps_lock` lists the `ark` and `liquid` extras; an invoice is paid once,
+  `ssps_lock` lists the `arkade` and `liquid` extras; an invoice is paid once,
   on one rail.
 - §5.1: the payer checks the fetched invoice's expiry. §3.3: claim and refund
   fees are each party's own. §6: `POST /offer` answers with the `offer_id`.
-- Test vectors: an `ark` ScriptV2 lock from the Arkade SDK.
+- Test vectors: an `arkade` ScriptV2 lock from the Arkade SDK.
 - Security reports through GitHub private vulnerability reporting
   ([SECURITY.md](SECURITY.md)).
 
