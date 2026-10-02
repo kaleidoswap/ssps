@@ -31,10 +31,14 @@ A leg moves `amount` of an asset on a `rail` from a payer to a payee:
 
 Rail ids name the network and, where one exists, the service or asset:
 `btc:mainnet`, `liquid:mainnet/<asset id>`, `ark:<server x-only pubkey>`,
-`ln:mainnet`, `rgb-ln:mainnet/<contract id>`.
+`ln:mainnet`, `rgb-ln:mainnet/<contract id>`. Networks are `mainnet`,
+`testnet4`, `signet`, or a custom signet's own name (`mutinynet`). Custom
+signets share signet's genesis block, so a chain hash cannot tell them apart;
+the rail id must.
 
-- `liquid` locks are unconfidential or share their blinding key, so the other
-  party can verify them.
+- `liquid` locks are unconfidential, or confidential with their 32-byte
+  blinding private key given to the other party as `blinding_key` (§3.3), so
+  it can verify them.
 - `btc` and `liquid` locks use exactly two leaves, with minimal script numbers:
 
   ```
@@ -88,7 +92,8 @@ sits between its incoming leg `Li` and its outgoing leg `Li+1`. In a swap the
 payer is also the recipient; in a payment the recipient is someone else,
 identified by what it asked to be paid with (an invoice, an offer, a claim key).
 
-The **recipient** chooses `P` and gives out only `H`. It claims `Ln`, revealing
+The **recipient** chooses `P`, 32 random bytes, and gives out only
+`H = SHA256(P)`. It claims `Ln`, revealing
 `P`; each provider then claims its incoming leg with `P`; the payer ends up
 holding `P` as proof of payment. No one else may know `P` before the recipient
 claims.
@@ -210,11 +215,21 @@ rail as the provider's incoming leg, in that rail's clock unit.
   `out.refund` is the provider's refund key for an outgoing chain or Ark lock,
   so the payee can rebuild it; an outgoing Ark lock adds `server` and
   `timeouts` to `out`.
+- On `liquid`, a confidential lock's address comes with its `blinding_key`, in
+  `in.lock` or in `out`.
 - An `ln` leg carries `min_final_cltv` (incoming) or `max_expiry` (outgoing)
   instead of `deadline`.
+- `in.prepay` is optional. When the incoming leg is `ln` and the provider funds
+  a chain or Ark lock, it can ask for a BOLT11 invoice settled on arrival, for
+  at most what that lock costs it in fees. The payer pays it together with the
+  hold invoice; the provider settles it only once the hold invoice's full
+  amount is also held, and locks nothing before. It is part of
+  `from_amount` and is kept if the payer never claims: abandoning a
+  provider-funded lock then costs the payer, not the provider.
 - `out.invoice` is present when `out.claim` was an offer (§5).
 - The fee is `from_amount` minus the value of `to_amount`; nothing else is
-  charged.
+  charged. `to_amount` is what is locked for the payee; each party pays the
+  fee of its own claim or refund.
 - `sig` is by `pubkey`, the card's key, over
   `SHA256("SSPS/quote/v2:" || JCS(quote without sig))`.
 
@@ -245,6 +260,9 @@ Build the route backwards from the recipient:
 2. Ask providers for the last hop with `out.claim` set to that request; the
    chosen quote's `in` becomes the previous hop's `out`. Repeat towards the
    payer.
+3. Verify the whole route (amounts, `H`, deadlines, signatures, `request`),
+   then lock `L1`. The route arms from the payer and settles from the
+   recipient.
 
 On a chain or Ark leg between two providers the upstream provider publishes
 the lock: the downstream quote gives only `in.lock.claim_key`, its deadline and
@@ -253,9 +271,6 @@ states it as `out.refund`, and the downstream provider rebuilds it before
 acting (rule 1). The downstream quote cannot give an address, because the
 upstream provider's refund key is not known when it is asked. An `ln` leg needs
 neither.
-3. Verify the whole route (amounts, `H`, deadlines, signatures, `request`),
-   then lock `L1`. The route arms from the payer and settles from the
-   recipient.
 
 Downstream quotes are accepted only when an upstream provider funds them, so
 their `valid_until` must cover the upstream confirmations; a provider never
@@ -272,7 +287,8 @@ An `ln` leg that pays an offer is bound to one invoice before anything is
 funded: the provider fetches the invoice and returns it as `quote.out.invoice`.
 The payer checks that it is signed by the offer's `offer_issuer_id` or, if
 there is none, by the last node of one of the offer's blinded message paths,
-and that its amount and `invoice_payment_hash` match the quote.
+that its amount and `invoice_payment_hash` match the quote, and that it does
+not expire before the provider's incoming leg can be ready.
 
 ### 5.2 Receiving on an offer
 
@@ -291,7 +307,15 @@ ranges until allocated. Values are UTF-8 JCS JSON.
 |---|---|---|
 | offer | 1000000385 | `ssps_rails`: accepted rail ids, most preferred first; `ln` is always accepted, last unless listed |
 | invoice_request | 2000000385 | `ssps_rail`: `{ "rail", "refund" }` chosen by the payer |
-| invoice | 3000000385 | `ssps_lock`: `{ "rail", "amount", "key", "address", "deadline", "confirmations" }` for `invoice_payment_hash` |
+| invoice | 3000000385 | `ssps_lock`: `{ "rail", "amount", "key", "address", "deadline", "confirmations" }` for `invoice_payment_hash`, plus `server` and `timeouts` on `ark` and `blinding_key` on a confidential `liquid` lock |
+
+A bare `ln` is Lightning on the offer's network; on a custom signet, whose
+chain hash is signet's, rails are named in full (`ln:mutinynet`).
+
+The issuer sets `ssps_rails` when it creates the offer. A node that recognises
+its own offers by metadata authenticated over the offer's records, as LDK does,
+covers the experimental records too, so a record added to an existing offer
+makes every invoice request for it fail.
 
 The invoice signature authenticates `ssps_lock` as the issuer's.
 `invoice_amount` stays the Lightning price; `ssps_lock.amount` is the price on
@@ -303,6 +327,11 @@ none, it requests an invoice for a listed rail and builds a route (§4) ending
 in that `ssps_lock`, or in the invoice itself for `ln`. The order is a
 preference, not an obligation. The issuer watches each listed rail for a
 matching lock and claims it under rule 4.
+
+An invoice is paid once. The issuer settles the first payment that is ready,
+on the chosen rail or on Lightning, fails back a Lightning payment that
+arrives second and does not claim a second lock, which its payer refunds after
+the deadline. A payer pays one of them (rule 10).
 
 ### 5.4 Offers for wallets without a node
 
@@ -355,7 +384,7 @@ unallocated experimental values.
 |---|---|
 | `GET {http}/card` | `card` with `sig` over `SHA256("SSPS/card/v2:" \|\| JCS(card))` |
 | `POST {http}/rfq` | `quote` or `refusal` |
-| `POST {http}/offer` | `status` |
+| `POST {http}/offer` | `status` or `refusal`, `id` = the offer's BOLT12 `offer_id` |
 | `GET {http}/status/{id}` | `status` |
 
 Cooperative MuSig2 claims and refunds are optional per rail and never needed

@@ -1,5 +1,26 @@
 # Changelog
 
+## Draft 2, revisions — 2026-10-02
+
+- Network names: `mainnet`, `testnet4`, `signet`, or a custom signet's own
+  name. Custom signets share signet's chain hash, so rail ids name them.
+- `P` is 32 random bytes and `H = SHA256(P)`, stated in §1.2.
+- `ark` locks are `VHTLC.ScriptV2` (size check on `claim` and
+  `unilateralClaim`), whoever funds them; `VHTLC.Script` v1 is no longer
+  allowed. Quotes and `ssps_lock` carry the server key and the four timeouts.
+- Optional `in.prepay` on provider-funded chain and Ark locks bought with
+  Lightning, settled on arrival, so abandoning such a lock costs the payer.
+- Confidential `liquid` locks carry their `blinding_key`.
+- §5.3: bare `ln` means Lightning on the offer's network; `ssps_rails` is set
+  when the offer is created (adding it later breaks LDK's offer recognition);
+  `ssps_lock` lists the `ark` and `liquid` extras; an invoice is paid once,
+  on one rail.
+- §5.1: the payer checks the fetched invoice's expiry. §3.3: claim and refund
+  fees are each party's own. §6: `POST /offer` answers with the `offer_id`.
+- Test vectors: an `ark` ScriptV2 lock from the Arkade SDK.
+- Security reports through GitHub private vulnerability reporting
+  ([SECURITY.md](SECURITY.md)).
+
 ## Draft 2 — 2026-09-29
 
 Breaking rewrite into a single document, [ssps.md](ssps.md), replacing draft 1

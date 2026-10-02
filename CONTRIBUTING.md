@@ -13,9 +13,9 @@ independent implementations and relevant conformance gates are documented.
 
 Run the checks in README. Fixtures use public fixed test keys only; never submit
 live wallet seeds, keys, authorization tokens, invoices or private customer data.
-Real deployment vulnerabilities need a privately agreed maintainer contact before
-disclosure; a monitored security channel remains a publication prerequisite.
-No security inbox or bLIP/NIP assignment is invented by this document.
+Report vulnerabilities privately, as [SECURITY.md](SECURITY.md) says, never in a
+public issue. Discuss everything else in issues and pull requests.
 
-Use issue/PR discussion when this repository is published. No outside project is
-assumed to endorse SSPS or to have accepted the proposed allocations.
+No bLIP, NIP or BOLT allocation is claimed: the TLV types and Nostr kinds used
+here are experimental values. No outside project is assumed to endorse SSPS or
+to have accepted them.

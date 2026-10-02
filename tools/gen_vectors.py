@@ -35,6 +35,24 @@ def tlv(record_type, value):
     return (r.bigsize(record_type) + r.bigsize(len(raw)) + raw).hex()
 
 
+# An `ark` VHTLC.ScriptV2 lock as @arkade-os/sdk 0.4.60 builds it (six leaves, no
+# covenants). Copied from the SDK, not derived here: the tools rebuild only the
+# claim leaf; the output key is the SDK's tweakedPublicKey for these inputs.
+ARK_V2 = {
+    'source': '@arkade-os/sdk 0.4.60 VHTLC.ScriptV2, regtest',
+    'sender': '79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798',
+    'receiver': 'c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5',
+    'server': 'f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9',
+    'preimage_hash160': '6f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b',
+    'timeouts': {'refund': 1800003600, 'unilateral_claim': 512, 'unilateral_refund': 1024,
+                 'unilateral_refund_without_receiver': 1536},
+    'claim_leaf': '82012088a9146f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b876920c6047f9441ed7d6d'
+                  '3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5ad20f9308a019258c31049344f'
+                  '85f89d5229b531c845836f99b08601f113bce036f9ac',
+    'output_key': '205fcd2eb2a6c08273f7e2a7853112b64c8511bc3af199548e426dac83068455',
+}
+
+
 def generate():
     identity, client_nostr = secret(0x04), secret(0x05)
     payer_refund, provider_claim = secret(0x02), secret(0x01)
@@ -103,7 +121,8 @@ def generate():
                                  'recipient_claim': '07' * 32, 'provider_refund': '08' * 32},
                      'preimage': preimage.hex(), 'payment_hash': H, 'tips': tips},
         'locks': {'btc_in': {**btc_lock, 'address': btc_address, 'deadline': in_deadline},
-                  'liquid_out': {**liquid_lock, 'deadline': out_deadline}},
+                  'liquid_out': {**liquid_lock, 'deadline': out_deadline},
+                  'ark_v2': ARK_V2},
         'deadline_check': {'margin_in_rail_blocks': 72, 'block_seconds': card_body['block_seconds'],
                            'in_remaining_seconds': 300 * 600, 'out_remaining_seconds': 1440 * 60,
                            'ok': 300 * 600 >= 1440 * 60 + 72 * 600},

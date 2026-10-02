@@ -24,7 +24,7 @@ what changed.
 ## Test vectors
 
 [test-vectors/draft2.json](test-vectors/draft2.json) covers the `btc` and
-`liquid` locks, a signed card (HTTP and Nostr), an `rfq` and the `quote` that
+`liquid` locks, an `ark` ScriptV2 lock taken from the Arkade SDK, a signed card (HTTP and Nostr), an `rfq` and the `quote` that
 binds it, NIP-44 encrypted Nostr messages, and the three BOLT12 TLVs. All keys
 are public test keys; the pure-Python primitives in `tools/ssps_ref.py` are for
 fixtures only. NIP-44 is also checked against a subset of the
@@ -40,4 +40,4 @@ With `tools/requirements-check.txt` installed, `check_vectors.py` also verifies
 signatures, JCS and ChaCha20 with independent libraries.
 
 Open for review: issues and pull requests welcome. [Contributing](CONTRIBUTING.md) ·
-[CC0-1.0](LICENSE).
+[Security](SECURITY.md) · [CC0-1.0](LICENSE).

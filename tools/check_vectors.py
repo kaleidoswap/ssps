@@ -118,6 +118,15 @@ class Vectors(unittest.TestCase):
         preimage = bytes.fromhex(FIX['metadata']['preimage'])
         self.assertEqual(leaf[6:26], r.rmd160(r.sha256(preimage)))
 
+    def test_ark_v2_claim_leaf(self):
+        ark = FIX['locks']['ark_v2']
+        leaf = (bytes.fromhex('82012088a914') + bytes.fromhex(ark['preimage_hash160'])
+                + bytes.fromhex('876920') + bytes.fromhex(ark['receiver'])
+                + bytes.fromhex('ad20') + bytes.fromhex(ark['server']) + bytes.fromhex('ac'))
+        self.assertEqual(leaf.hex(), ark['claim_leaf'])
+        self.assertEqual(leaf[:4], bytes.fromhex('82012088'), 'ScriptV2 checks the preimage size')
+        self.assertTrue(all(v % 512 == 0 for k, v in ark['timeouts'].items() if k != 'refund'))
+
     def test_deadline_ordering(self):
         d = FIX['deadline_check']
         margin = d['margin_in_rail_blocks'] * d['block_seconds']['btc']

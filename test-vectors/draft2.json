@@ -96,6 +96,21 @@
     "out_remaining_seconds": 86400
   },
   "locks": {
+    "ark_v2": {
+      "claim_leaf": "82012088a9146f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b876920c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5ad20f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9ac",
+      "output_key": "205fcd2eb2a6c08273f7e2a7853112b64c8511bc3af199548e426dac83068455",
+      "preimage_hash160": "6f0e2b1c9a3d4e5f60718293a4b5c6d7e8f90a1b",
+      "receiver": "c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5",
+      "sender": "79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798",
+      "server": "f9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9",
+      "source": "@arkade-os/sdk 0.4.60 VHTLC.ScriptV2, regtest",
+      "timeouts": {
+        "refund": 1800003600,
+        "unilateral_claim": 512,
+        "unilateral_refund": 1024,
+        "unilateral_refund_without_receiver": 1536
+      }
+    },
     "btc_in": {
       "address": "bc1pzax2uv59vr9gr8q7utk8scafc69s07cxw65lfcd6j2sjaynssv5qhpgk3t",
       "claim_leaf": "82012088a9144d5209774e22ea63e2987579562d9a4ea3dab62388201b84c5567b126440995d3ed5aaba0565d71e1834604819ff9c17f5e9d5dd078fac",
